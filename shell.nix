@@ -9,4 +9,6 @@ with import <nixpkgs> {};
     '';
     # cmake -G Ninja -DCMAKE_MAKE_PROGRAM=$(which ninja) /home/wurm/Dev/Falcon
     # ninja && ./falcon main.cpp
+
+    # cmake -G Ninja -DCMAKE_MAKE_PROGRAM=$(which ninja) && ninja && ./falcon main.cpp
   }

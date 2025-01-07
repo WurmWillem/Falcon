@@ -8,14 +8,15 @@ void Editor::initialize()
     noecho();
     keypad(stdscr, TRUE);
 
-    getmaxyx(stdscr, term_rows, term_cols);
+    getmaxyx(stdscr, termRows, termCols);
 
-    lineNumWin = newwin(term_rows, 6, 0, 0);
-    textBufWin = newwin(term_rows, term_cols - 6, 0, 8);
+    lineNumWin = newwin(termRows, 6, 0, 0);
+    textBufWin = newwin(termRows, termCols - 6, 0, 8);
 
-    current_row = 0;
-    scrolloff = 8;
-    relative_row = 0;
+    currentRow = 0;
+    scrollOff = 8;
+    yPos = 0;
+    xPos = 0;
 
     /*start_color();*/
     /*init_pair(1, COLOR_GREEN, COLOR_BLACK);*/

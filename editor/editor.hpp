@@ -11,13 +11,16 @@ class Editor
 private:
     bool quit = false;
 
-    size_t term_rows;
-    size_t term_cols;
+    size_t termRows;
+    size_t termCols;
 
-    size_t scrolloff;
-    size_t relative_row;
-    size_t current_row;
-    size_t file_rows;
+    size_t scrollOff;
+
+    size_t yPos;
+    size_t xPos;
+
+    size_t currentRow;
+    size_t fileRows;
 
     WINDOW *lineNumWin;
     WINDOW *textBufWin;
@@ -38,9 +41,12 @@ private:
 
     void drawLines();
     void drawLineNumbers();
+    void wMotion();
 
-    void goUp();
-    void keypressedArrowDown();
+    void moveCursorUp();
+    void moveCursorDown();
+    void moveRight();
+    void moveLeft();
 };
 
 constexpr inline int controlKey(int ch)

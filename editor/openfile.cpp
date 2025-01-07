@@ -16,7 +16,7 @@ void Editor::openFile(char const *filename)
     }
 
     file.close();
-    file_rows = lines.size();
+    fileRows = lines.size();
 }
 
 // This function opens a filepath from <filesystem> and loads its data
