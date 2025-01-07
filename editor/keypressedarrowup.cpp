@@ -1,6 +1,6 @@
 #include "editor.ih"
 
-void Editor::keypressedArrowUp()
+void Editor::keyPressedArrowUp()
 {
     if (relative_row > 0)
     {

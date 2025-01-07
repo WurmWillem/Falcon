@@ -4,24 +4,27 @@ void Editor::processKeypress(int ch)
 {
     switch (ch)
     {
-    case KEY_F(1):
+    case controlKey('q'):
         quit = true;
         break;
-    case KEY_UP:
-        keypressedArrowUp();
+    case 27:
+        quit = true;
         break;
-    case KEY_DOWN:
+    case 'k':
+        keyPressedArrowUp();
+        break;
+    case 'j':
         keypressedArrowDown();
         break;
-    case KEY_LEFT:
+    case 'h':
         break;
-    case KEY_RIGHT:
+    case 'l':
         break;
-    case control_key('u'):
+    case controlKey('u'):
         for (size_t ix = 0; ix != term_rows / 2; ++ix)
-            keypressedArrowUp();
+            keyPressedArrowUp();
         break;
-    case control_key('d'):
+    case controlKey('d'):
         for (size_t ix = 0; ix != term_rows / 2; ++ix)
             keypressedArrowDown();
         break;
@@ -29,5 +32,3 @@ void Editor::processKeypress(int ch)
         break;
     }
 }
-
-// This function takes in a keypress and processes the key

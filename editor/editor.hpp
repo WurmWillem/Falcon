@@ -39,11 +39,11 @@ private:
     void drawLines();
     void drawLineNumbers();
 
-    void keypressedArrowUp();
+    void keyPressedArrowUp();
     void keypressedArrowDown();
 };
 
-constexpr inline int control_key(int ch)
+constexpr inline int controlKey(int ch)
 {
     return ((ch) & 0x1f);
 }
