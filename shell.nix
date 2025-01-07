@@ -1,10 +1,12 @@
-with import <nixpkgs> {}; 
+with import <nixpkgs> {};
+  pkgs.mkShell {
+    name = "falcon";
+    buildInputs = [stdenv ncurses cmake ninja];
 
-pkgs.mkShell {
-  name = "falcon";
-  buildInputs = [stdenv ncurses cmake ninja ];
-
-  shellHook = ''
-    fish
-  '';
-}
+    shellHook = ''
+      export CMAKE_GENERATOR="Ninja"
+      fish
+    '';
+    # cmake -G Ninja -DCMAKE_MAKE_PROGRAM=$(which ninja) /home/wurm/Dev/Falcon
+    # ninja && ./falcon main.cpp
+  }
