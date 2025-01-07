@@ -39,7 +39,7 @@ private:
     void drawLines();
     void drawLineNumbers();
 
-    void keyPressedArrowUp();
+    void goUp();
     void keypressedArrowDown();
 };
 

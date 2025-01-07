@@ -7,4 +7,3 @@ build.ninja
 *.a
 falcon
 CMakeCache.txt
-shell.nix
