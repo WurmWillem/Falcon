@@ -6,7 +6,7 @@ void Editor::renderLines()
     wmove(textBufWin, 0, 0);
     // draw text
     for (size_t ix = currentRow;
-         ix != std::min(currentRow + termRows - 1, fileRows); ++ix)
+         ix < std::min(currentRow + termRows - 1, fileRows); ++ix)
     {
         wprintw(textBufWin, "%s\n", lines[ix].c_str());
     }
@@ -19,10 +19,10 @@ void Editor::renderLines()
 void Editor::renderLineNumbers()
 {
     wmove(lineNumWin, 0, 0);
-    for (size_t ix = currentRow + 1; ix < std::min(termRows + currentRow, lines.size()); ++ix)
+    for (size_t ix = currentRow; ix < std::min(termRows + currentRow, lines.size()); ++ix)
     /*for (size_t ix = currentRow + 1; ix < lines.size() + 1; ++ix)*/
     {
-        wprintw(lineNumWin, "%*zu\n", 5, ix);
+        wprintw(lineNumWin, "%*zu\n", 5, ix + 1);
     }
     wrefresh(lineNumWin);
 }

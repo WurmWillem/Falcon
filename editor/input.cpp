@@ -23,23 +23,29 @@ void Editor::processKeypress(int ch)
         break;
     case 'h':
         moveLeft();
+        yAfterLastHorMov = yPos;
         break;
     case 'l':
         moveRight();
+        yAfterLastHorMov = yPos;
         break;
     case 'w':
         wMotion();
+        yAfterLastHorMov = yPos;
         break;
     case 'b':
         bMotion();
+        yAfterLastHorMov = yPos;
         break;
     case controlKey('u'):
         for (size_t _ = 0; _ != termRows / 2; ++_)
             moveCursorUp();
+        yAfterLastHorMov = yPos;
         break;
     case controlKey('d'):
         for (size_t _ = 0; _ != termRows / 2; ++_)
             moveCursorDown();
+        yAfterLastHorMov = yPos;
         break;
     default:
         break;
@@ -89,7 +95,7 @@ void Editor::bMotion()
     }
 
     xPos--;
-    if (std::isalpha(lines[yPos][xPos ]))
+    if (std::isalpha(lines[yPos][xPos]))
     {
         // move back until no alpha anymore
         for (size_t i = xPos; i > 0; i--)
@@ -115,7 +121,7 @@ void Editor::bMotion()
                 return;
             }
         }
-    } 
+    }
 }
 
 void Editor::moveRight()
@@ -139,6 +145,10 @@ void Editor::moveCursorUp()
     if (yPos > 0)
     {
         --yPos;
+        if (xPos > lines[yPos].length() - 1) {
+            xPos = lines[yPos].length() - 1;
+        }
+
         if (yPos - currentRow < scrollOff && currentRow > 0)
         {
             --currentRow;
@@ -151,9 +161,12 @@ void Editor::moveCursorDown()
 {
     if (yPos < fileRows)
     {
-        /*printf("%zu", lines.size() - termRows);*/
         ++yPos;
-        if (yPos - currentRow > scrollOff && currentRow < fileRows - termRows)
+        if (xPos > lines[yPos].length() - 1) {
+            xPos = lines[yPos].length() - 1;
+        }
+
+        if (yPos > currentRow + termRows - scrollOff && currentRow < fileRows - termRows)
         {
             ++currentRow;
         }

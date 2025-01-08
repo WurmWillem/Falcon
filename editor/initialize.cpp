@@ -17,6 +17,7 @@ void Editor::initialize()
     scrollOff = 8;
     yPos = 0;
     xPos = 0;
+    yAfterLastHorMov = 0;
 
     /*start_color();*/
     /*init_pair(1, COLOR_GREEN, COLOR_BLACK);*/

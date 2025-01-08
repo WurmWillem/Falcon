@@ -18,12 +18,15 @@ private:
 
     size_t yPos;
     size_t xPos;
+    size_t yAfterLastHorMov;
 
     size_t currentRow;
     size_t fileRows;
 
     WINDOW *lineNumWin;
     WINDOW *textBufWin;
+
+    std::string fileName;
 
     std::vector<std::string> lines;
 
@@ -33,6 +36,7 @@ public:
 
     void initialize();
     void openFile(const char *filename);
+    void saveFile();
     void run();
 
 private:
