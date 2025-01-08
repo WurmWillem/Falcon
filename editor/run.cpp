@@ -5,7 +5,7 @@ void Editor::run()
     while (!quit)
     {
         processKeypress(readKey());
-        drawLines();
+        renderLines();
     }
 }
 

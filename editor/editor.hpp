@@ -39,9 +39,10 @@ private:
     int readKey();
     void processKeypress(int ch);
 
-    void drawLines();
-    void drawLineNumbers();
+    void renderLines();
+    void renderLineNumbers();
     void wMotion();
+    void bMotion();
 
     void moveCursorUp();
     void moveCursorDown();

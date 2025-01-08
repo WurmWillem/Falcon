@@ -1,6 +1,7 @@
 #include "editor.ih"
 #include <cctype>
 #include <cstddef>
+#include <cstdio>
 
 int Editor::readKey() { return getch(); }
 
@@ -29,12 +30,15 @@ void Editor::processKeypress(int ch)
     case 'w':
         wMotion();
         break;
+    case 'b':
+        bMotion();
+        break;
     case controlKey('u'):
-        for (size_t ix = 0; ix != termRows / 2; ++ix)
+        for (size_t _ = 0; _ != termRows / 2; ++_)
             moveCursorUp();
         break;
     case controlKey('d'):
-        for (size_t ix = 0; ix != termRows / 2; ++ix)
+        for (size_t _ = 0; _ != termRows / 2; ++_)
             moveCursorDown();
         break;
     default:
@@ -44,12 +48,21 @@ void Editor::processKeypress(int ch)
 
 void Editor::wMotion()
 {
+    bool spacePassed = false;
     if (std::isalpha(lines[yPos][xPos]))
     {
         for (size_t i = xPos; i < lines[yPos].length() - 1; i++)
         {
             xPos++;
-            if (!std::isalpha(lines[yPos][xPos]))
+            if (lines[yPos][xPos] == ' ')
+            {
+                spacePassed = true;
+            }
+            else if (spacePassed)
+            {
+                return;
+            }
+            if (!std::isalpha(lines[yPos][xPos]) && lines[yPos][xPos] != ' ')
             {
                 return;
             }
@@ -60,8 +73,46 @@ void Editor::wMotion()
         for (size_t i = xPos; i < lines[yPos].length() - 1; i++)
         {
             xPos++;
-            if (std::isalpha(lines[yPos][xPos]))
+            if (lines[yPos][xPos] != ' ')
             {
+                return;
+            }
+        }
+    }
+}
+
+void Editor::bMotion()
+{
+    if (xPos <= 0)
+    {
+        return;
+    }
+    bool spacePassed = false;
+    if (std::isalpha(lines[yPos][xPos]))
+    {
+        // move back until you hit white space or non alpha
+        // unless x
+        xPos--;
+        for (size_t i = xPos; i > 0; i--)
+        {
+            xPos--;
+            if (!std::isalpha(lines[yPos][xPos]))
+            {
+                xPos++;
+                return;
+            }
+        }
+    }
+    else
+    {
+        // move until space found or not alphabetic
+        // problem:
+        for (size_t i = xPos; i > 0; i--)
+        {
+            xPos--;
+            if (lines[yPos][xPos] == ' ' || !std::isalpha(lines[yPos][xPos]))
+            {
+                xPos++;
                 return;
             }
         }
@@ -89,26 +140,24 @@ void Editor::moveCursorUp()
     if (yPos > 0)
     {
         --yPos;
-        if (currentRow > 0 && yPos < scrollOff)
+        if (yPos - currentRow < scrollOff && currentRow > 0)
         {
             --currentRow;
-            ++yPos;
         }
-        drawLineNumbers();
+        renderLineNumbers();
     }
 }
 
 void Editor::moveCursorDown()
 {
-    if (yPos + currentRow < fileRows - 1)
+    if (yPos < termRows)
     {
+      /*printf("%zu", lines.size() - termRows);*/
         ++yPos;
-        if (currentRow + termRows - 1 < fileRows
-            && yPos + 2 > termRows - scrollOff)
+        if (yPos - currentRow > scrollOff && currentRow < lines.size() - termRows)
         {
             ++currentRow;
-            --yPos;
         }
-        drawLineNumbers();
+        renderLineNumbers();
     }
 }

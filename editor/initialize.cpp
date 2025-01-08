@@ -25,8 +25,8 @@ void Editor::initialize()
     /*attroff(COLOR_PAIR(1));*/
 
     refresh();
-    drawLineNumbers();
-    drawLines();
+    renderLineNumbers();
+    renderLines();
 }
 
 // This function enabled rawmode and configures the terminal to the way we want it.

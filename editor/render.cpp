@@ -1,6 +1,6 @@
 #include "editor.ih"
 
-void Editor::drawLines()
+void Editor::renderLines()
 {
     // move cursor to start
     wmove(textBufWin, 0, 0);
@@ -12,8 +12,18 @@ void Editor::drawLines()
     }
 
     // move cursor to correct position and refresh screen
-    wmove(textBufWin, yPos, xPos);
+    wmove(textBufWin, yPos - currentRow, xPos);
     wrefresh(textBufWin);
+}
+
+void Editor::renderLineNumbers()
+{
+    wmove(lineNumWin, 0, 0);
+    for (size_t ix = currentRow + 1; ix < std::min(termRows + currentRow, lines.size()); ++ix)
+    {
+        wprintw(lineNumWin, "%*zu\n", 5, ix);
+    }
+    wrefresh(lineNumWin);
 }
 
 // This functions draws the text from the current file onto the screen
