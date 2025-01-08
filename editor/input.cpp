@@ -3,6 +3,7 @@
 #include <cctype>
 #include <cstddef>
 #include <cstdio>
+#include <optional>
 int Editor::readKey() { return getch(); }
 
 void Editor::processKeypress(int ch)
@@ -55,12 +56,10 @@ void Editor::processNormalKey(int ch)
         xAfterLastHorMove = xPos;
         break;
     case 'w':
-        wMotion();
-        xAfterLastHorMove = xPos;
+        moveCursor(wMotion());
         break;
     case 'b':
-        bMotion();
-        xAfterLastHorMove = xPos;
+        moveCursor(bMotion(0));
         break;
     case controlKey('u'):
         for (size_t _ = 0; _ != termRows / 2; ++_)
@@ -77,80 +76,85 @@ void Editor::processNormalKey(int ch)
     }
 }
 
-void Editor::wMotion()
+void Editor::moveCursor(int xMov)
 {
+    xPos += xMov;
+    xAfterLastHorMove = xPos;
+}
+
+size_t Editor::wMotion()
+{
+    size_t xMov = 0;
     bool spacePassed = false;
+
     if (std::isalpha(lines[yPos][xPos]))
     {
         for (size_t i = xPos; i < lines[yPos].length() - 1; i++)
         {
-            xPos++;
-            if (lines[yPos][xPos] == ' ')
+            xMov++;
+            if (lines[yPos][xPos + xMov] == ' ')
             {
                 spacePassed = true;
             }
             else if (spacePassed)
             {
-                return;
+                return xMov;
             }
-            else if (!std::isalpha(lines[yPos][xPos])
-                     && lines[yPos][xPos] != ' ')
+            else if (!std::isalpha(lines[yPos][xPos + xMov])
+                     && lines[yPos][xPos + xMov] != ' ')
             {
-                return;
+                return xMov;
             }
-            /*else if (i == lines[yPos].length() - 2) {*/
-            /*   moveCursorDown();*/
-            /*}*/
         }
     }
     else
     {
         for (size_t i = xPos; i < lines[yPos].length() - 1; i++)
         {
-            xPos++;
-            if (lines[yPos][xPos] != ' ')
+            xMov++;
+            if (lines[yPos][xPos + xMov] != ' ')
             {
-                return;
+                return xMov;
             }
         }
     }
+    return xMov;
 }
 
-void Editor::bMotion()
+int Editor::bMotion(int xMov)
 {
     if (xPos <= 0)
     {
-        return;
+        return 0;
     }
 
-    xPos--;
-    if (std::isalpha(lines[yPos][xPos]))
+    xMov--;
+    if (std::isalpha(lines[yPos][xPos + xMov]))
     {
         // move back until no alpha anymore
-        for (size_t i = xPos; i > 0; i--)
+        for (size_t i = xPos + xMov; i > 0; i--)
         {
-            xPos--;
-            if (!std::isalpha(lines[yPos][xPos]))
+            xMov--;
+            if (!std::isalpha(lines[yPos][xPos + xMov]))
             {
-                xPos++;
-                return;
+                return xMov + 1;
             }
         }
     }
-    else if (lines[yPos][xPos] == ' ')
+    else if (lines[yPos][xPos + xMov] == ' ')
     {
         // move until no space anymore
-        for (size_t i = xPos; i > 0; i--)
+        for (size_t i = xPos + xMov; i > 0; i--)
         {
-            xPos--;
-            if (lines[yPos][xPos] != ' ')
+            xMov--;
+            if (lines[yPos][xPos + xMov] != ' ')
             {
-                xPos++;
-                bMotion();
-                return;
+                xMov = bMotion(xMov + 1);
+                return xMov;
             }
         }
     }
+    return xMov;
 }
 
 void Editor::moveRight()

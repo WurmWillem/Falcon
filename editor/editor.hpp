@@ -10,14 +10,20 @@ enum Mode
 {
     Normal,
     Insert,
-}; 
+};
+enum Operator
+{
+    None,
+    D,
+};
 
 class Editor
 {
 private:
     bool quit = false;
-    
+
     Mode mode = Mode::Normal;
+    Operator op = Operator::None;
 
     size_t termRows;
     size_t termCols;
@@ -57,9 +63,10 @@ private:
 
     void renderLines();
     void renderLineNumbers();
-    void wMotion();
-    void bMotion();
 
+    void moveCursor(int xMov);
+    size_t wMotion();
+    int bMotion(int xMov);
 
     void moveCursorUp();
     void moveCursorDown();
