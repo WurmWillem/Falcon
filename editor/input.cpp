@@ -3,7 +3,6 @@
 #include <cctype>
 #include <cstddef>
 #include <cstdio>
-#include <optional>
 int Editor::readKey() { return getch(); }
 
 void Editor::processKeypress(int ch)
@@ -16,7 +15,7 @@ void Editor::processKeypress(int ch)
     case controlKey('s'):
         saveFile();
         break;
-    case 27:
+    case 27: // Esc pressed
         mode = Normal;
         break;
     default:
@@ -41,6 +40,9 @@ void Editor::processNormalKey(int ch)
     case 'i':
         mode = Insert;
         break;
+    case 'd':
+        op = d;
+        break;
     case 'k':
         moveCursorUp();
         break;
@@ -56,10 +58,10 @@ void Editor::processNormalKey(int ch)
         xAfterLastHorMove = xPos;
         break;
     case 'w':
-        moveCursor(wMotion());
+        executeMotion(wMotion());
         break;
     case 'b':
-        moveCursor(bMotion(0));
+        executeMotion(bMotion(0));
         break;
     case controlKey('u'):
         for (size_t _ = 0; _ != termRows / 2; ++_)
@@ -74,6 +76,30 @@ void Editor::processNormalKey(int ch)
     default:
         break;
     }
+}
+
+void Editor::executeMotion(int x)
+{
+    switch (op)
+    {
+    case d:
+        del(x);
+        break;
+    default:
+        moveCursor(x);
+        break;
+    }
+}
+
+void Editor::del(int xRange)
+{
+    lines[yPos].erase(xPos, xRange);
+    /*for (int i = 0; i < xRange; i++)*/
+    /*{*/
+    /*lines[yPos].erase(i, 1);*/
+    /*lines[yPos][xPos + i] = '4';*/
+    /*}*/
+    op = None;
 }
 
 void Editor::moveCursor(int xMov)

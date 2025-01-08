@@ -14,7 +14,7 @@ enum Mode
 enum Operator
 {
     None,
-    D,
+    d,
 };
 
 class Editor
@@ -64,7 +64,9 @@ private:
     void renderLines();
     void renderLineNumbers();
 
+    void executeMotion(int x);
     void moveCursor(int xMov);
+    void del(int xRange);
     size_t wMotion();
     int bMotion(int xMov);
 
