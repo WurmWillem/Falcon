@@ -23,29 +23,29 @@ void Editor::processKeypress(int ch)
         break;
     case 'h':
         moveLeft();
-        yAfterLastHorMov = yPos;
+        xAfterLastHorMove = xPos;
         break;
     case 'l':
         moveRight();
-        yAfterLastHorMov = yPos;
+        xAfterLastHorMove = xPos;
         break;
     case 'w':
         wMotion();
-        yAfterLastHorMov = yPos;
+        xAfterLastHorMove = xPos;
         break;
     case 'b':
         bMotion();
-        yAfterLastHorMov = yPos;
+        xAfterLastHorMove = xPos;
         break;
     case controlKey('u'):
         for (size_t _ = 0; _ != termRows / 2; ++_)
             moveCursorUp();
-        yAfterLastHorMov = yPos;
+        xAfterLastHorMove = xPos;
         break;
     case controlKey('d'):
         for (size_t _ = 0; _ != termRows / 2; ++_)
             moveCursorDown();
-        yAfterLastHorMov = yPos;
+        xAfterLastHorMove = xPos;
         break;
     default:
         break;
@@ -145,8 +145,10 @@ void Editor::moveCursorUp()
     if (yPos > 0)
     {
         --yPos;
-        if (xPos > lines[yPos].length() - 1) {
+        if (xAfterLastHorMove > lines[yPos].length() - 1) {
             xPos = lines[yPos].length() - 1;
+        } else {
+          xPos = xAfterLastHorMove;
         }
 
         if (yPos - currentRow < scrollOff && currentRow > 0)
@@ -162,8 +164,10 @@ void Editor::moveCursorDown()
     if (yPos < fileRows)
     {
         ++yPos;
-        if (xPos > lines[yPos].length() - 1) {
+        if (xAfterLastHorMove > lines[yPos].length() - 1) {
             xPos = lines[yPos].length() - 1;
+        } else {
+          xPos = xAfterLastHorMove;
         }
 
         if (yPos > currentRow + termRows - scrollOff && currentRow < fileRows - termRows)
