@@ -11,7 +11,7 @@ void Editor::initialize()
     getmaxyx(stdscr, termRows, termCols);
 
     lineNumWin = newwin(termRows, 6, 0, 0);
-    textBufWin = newwin(termRows, termCols - 6, 0, 8);
+    textBufWin = newwin(termRows, termCols - 6, 0, 6);
 
     currentRow = 0;
     scrollOff = 8;

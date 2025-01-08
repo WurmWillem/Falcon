@@ -68,10 +68,13 @@ void Editor::wMotion()
             {
                 return;
             }
-            if (!std::isalpha(lines[yPos][xPos]) && lines[yPos][xPos] != ' ')
+            else if (!std::isalpha(lines[yPos][xPos]) && lines[yPos][xPos] != ' ')
             {
                 return;
             }
+            /*else if (i == lines[yPos].length() - 2) {*/
+            /*   moveCursorDown();*/
+            /*}*/
         }
     }
     else

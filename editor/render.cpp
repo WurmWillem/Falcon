@@ -19,7 +19,7 @@ void Editor::renderLines()
 void Editor::renderLineNumbers()
 {
     wmove(lineNumWin, 0, 0);
-    for (size_t ix = currentRow; ix < std::min(termRows + currentRow, lines.size()); ++ix)
+    for (size_t ix = currentRow; ix < std::min(termRows + currentRow , lines.size()); ++ix)
     /*for (size_t ix = currentRow + 1; ix < lines.size() + 1; ++ix)*/
     {
         wprintw(lineNumWin, "%*zu\n", 5, ix + 1);
