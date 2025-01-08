@@ -6,10 +6,18 @@
 #include <string>
 #include <vector>
 
+enum Mode
+{
+    Normal,
+    Insert,
+}; 
+
 class Editor
 {
 private:
     bool quit = false;
+    
+    Mode mode = Mode::Normal;
 
     size_t termRows;
     size_t termCols;
@@ -18,7 +26,7 @@ private:
 
     size_t yPos;
     size_t xPos;
-    size_t xAfterLastHorMove; 
+    size_t xAfterLastHorMove;
 
     size_t currentRow;
     size_t fileRows;
@@ -42,11 +50,16 @@ public:
 private:
     int readKey();
     void processKeypress(int ch);
+    void processNormalKey(int ch);
+    void processInsertKey(int ch);
+
+    void insertChar(int ch);
 
     void renderLines();
     void renderLineNumbers();
     void wMotion();
     void bMotion();
+
 
     void moveCursorUp();
     void moveCursorDown();
@@ -54,9 +67,6 @@ private:
     void moveLeft();
 };
 
-constexpr inline int controlKey(int ch)
-{
-    return ((ch) & 0x1f);
-}
+constexpr inline int controlKey(int ch) { return ((ch) & 0x1f); }
 
 #endif

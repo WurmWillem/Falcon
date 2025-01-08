@@ -1,8 +1,8 @@
+#include "editor.hpp"
 #include "editor.ih"
 #include <cctype>
 #include <cstddef>
 #include <cstdio>
-
 int Editor::readKey() { return getch(); }
 
 void Editor::processKeypress(int ch)
@@ -12,9 +12,34 @@ void Editor::processKeypress(int ch)
     case controlKey('q'):
         quit = true;
         break;
-    /*case 27:*/
-    /*    quit = true;*/
-    /*    break;*/
+    case controlKey('s'):
+        saveFile();
+        break;
+    case 27:
+        mode = Normal;
+        break;
+    default:
+        break;
+    }
+
+    switch (mode)
+    {
+    case Normal:
+        processNormalKey(ch);
+        break;
+    case Insert:
+        processInsertKey(ch);
+        break;
+    }
+}
+
+void Editor::processNormalKey(int ch)
+{
+    switch (ch)
+    {
+    case 'i':
+        mode = Insert;
+        break;
     case 'k':
         moveCursorUp();
         break;
@@ -68,7 +93,8 @@ void Editor::wMotion()
             {
                 return;
             }
-            else if (!std::isalpha(lines[yPos][xPos]) && lines[yPos][xPos] != ' ')
+            else if (!std::isalpha(lines[yPos][xPos])
+                     && lines[yPos][xPos] != ' ')
             {
                 return;
             }
@@ -148,10 +174,13 @@ void Editor::moveCursorUp()
     if (yPos > 0)
     {
         --yPos;
-        if (xAfterLastHorMove > lines[yPos].length() - 1) {
+        if (xAfterLastHorMove > lines[yPos].length() - 1)
+        {
             xPos = lines[yPos].length() - 1;
-        } else {
-          xPos = xAfterLastHorMove;
+        }
+        else
+        {
+            xPos = xAfterLastHorMove;
         }
 
         if (yPos - currentRow < scrollOff && currentRow > 0)
@@ -167,13 +196,17 @@ void Editor::moveCursorDown()
     if (yPos < fileRows)
     {
         ++yPos;
-        if (xAfterLastHorMove > lines[yPos].length() - 1) {
+        if (xAfterLastHorMove > lines[yPos].length() - 1)
+        {
             xPos = lines[yPos].length() - 1;
-        } else {
-          xPos = xAfterLastHorMove;
+        }
+        else
+        {
+            xPos = xAfterLastHorMove;
         }
 
-        if (yPos > currentRow + termRows - scrollOff && currentRow < fileRows - termRows)
+        if (yPos > currentRow + termRows - scrollOff
+            && currentRow < fileRows - termRows)
         {
             ++currentRow;
         }
