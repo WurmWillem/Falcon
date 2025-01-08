@@ -87,12 +87,11 @@ void Editor::bMotion()
     {
         return;
     }
-    bool spacePassed = false;
-    if (std::isalpha(lines[yPos][xPos]))
+
+    xPos--;
+    if (std::isalpha(lines[yPos][xPos ]))
     {
-        // move back until you hit white space or non alpha
-        // unless x
-        xPos--;
+        // move back until no alpha anymore
         for (size_t i = xPos; i > 0; i--)
         {
             xPos--;
@@ -103,20 +102,20 @@ void Editor::bMotion()
             }
         }
     }
-    else
+    else if (lines[yPos][xPos] == ' ')
     {
-        // move until space found or not alphabetic
-        // problem:
+        // move until no space anymore
         for (size_t i = xPos; i > 0; i--)
         {
             xPos--;
-            if (lines[yPos][xPos] == ' ' || !std::isalpha(lines[yPos][xPos]))
+            if (lines[yPos][xPos] != ' ')
             {
                 xPos++;
+                bMotion();
                 return;
             }
         }
-    }
+    } 
 }
 
 void Editor::moveRight()
@@ -150,11 +149,11 @@ void Editor::moveCursorUp()
 
 void Editor::moveCursorDown()
 {
-    if (yPos < termRows)
+    if (yPos < fileRows)
     {
-      /*printf("%zu", lines.size() - termRows);*/
+        /*printf("%zu", lines.size() - termRows);*/
         ++yPos;
-        if (yPos - currentRow > scrollOff && currentRow < lines.size() - termRows)
+        if (yPos - currentRow > scrollOff && currentRow < fileRows - termRows)
         {
             ++currentRow;
         }
