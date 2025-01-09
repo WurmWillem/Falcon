@@ -6,6 +6,8 @@ void Editor::run()
     {
         processKeypress(readKey());
         renderLines();
+        /*renderLineNumbers();*/
+        /*renderLines();*/
     }
 }
 

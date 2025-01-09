@@ -1,6 +1,18 @@
 #include "editor.ih"
+#include <cstdio>
 
-void Editor::processInsertKey(int ch) { insertChar(ch); }
+void Editor::processInsertKey(int ch)
+{
+    switch (ch)
+    {
+    case controlKey('h'):
+        delCharBehind();
+        break;
+    default:
+        insertChar(ch);
+        break;
+    }
+}
 
 void Editor::insertChar(int ch)
 {
@@ -13,9 +25,7 @@ void Editor::insertChar(int ch)
     {
         if (xPos == 0)
         {
-            lines.insert(
-                lines.begin() + currentRow + yPos, std::string("")
-            );
+            lines.insert(lines.begin() + currentRow + yPos, std::string(""));
             ++fileRows;
             moveCursorDown();
         }
@@ -34,4 +44,38 @@ void Editor::insertChar(int ch)
             );
         }
     }
+}
+
+void Editor::delCharBehind()
+{
+    size_t fileRowsStart = fileRows;
+
+    if (xPos > 0) // cursor not at start of line
+    {
+        lines[yPos].erase(xPos - 1, 1);
+        xPos--;
+        renderLineNumbers();
+    }
+    else if (yPos > 0) // not at top of file
+    { 
+        // this is basically just dd
+        /*lines.erase(lines.begin() + yPos);*/
+
+        xPos = lines[yPos - 1].length();
+        lines[yPos - 1] += lines[yPos];
+
+        lines.erase(lines.begin() + yPos);
+        yPos--;
+        fileRows--;
+        renderLineNumbers();
+    }
+
+    /*if (currentRow > fileRows - termRows)*/
+    /*{*/
+    /*    currentRow = fileRows - termRows;*/
+    /*    drawLineNumbers();*/
+    /*    moveCursorDown();*/
+    /*    if (fileRowsStart != fileRows)*/
+    /*        moveCursorDown();*/
+    /*}*/
 }

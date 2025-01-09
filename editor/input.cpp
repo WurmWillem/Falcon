@@ -227,7 +227,7 @@ void Editor::moveCursorUp()
 
 void Editor::moveCursorDown()
 {
-    if (yPos < fileRows)
+    if (yPos < fileRows - 1)
     {
         ++yPos;
         if (xAfterLastHorMove > lines[yPos].length() - 1)

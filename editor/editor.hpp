@@ -60,6 +60,7 @@ private:
     void processInsertKey(int ch);
 
     void insertChar(int ch);
+    void delCharBehind();
 
     void renderLines();
     void renderLineNumbers();
