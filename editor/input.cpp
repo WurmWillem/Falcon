@@ -104,6 +104,10 @@ void Editor::del(int xRange)
 
 void Editor::moveCursor(int xMov)
 {
+    if (xPos + xMov == lines[yPos].length())
+    {
+        xMov--;
+    }
     xPos += xMov;
     xAfterLastHorMove = xPos;
 }
@@ -115,7 +119,7 @@ size_t Editor::wMotion()
 
     if (std::isalpha(lines[yPos][xPos]))
     {
-        for (size_t i = xPos; i < lines[yPos].length() - 1; i++)
+        for (size_t i = xPos; i < lines[yPos].length(); i++)
         {
             xMov++;
             if (lines[yPos][xPos + xMov] == ' ')
@@ -135,7 +139,7 @@ size_t Editor::wMotion()
     }
     else
     {
-        for (size_t i = xPos; i < lines[yPos].length() - 1; i++)
+        for (size_t i = xPos; i < lines[yPos].length(); i++)
         {
             xMov++;
             if (lines[yPos][xPos + xMov] != ' ')
